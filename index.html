@@ -1,47 +1,830 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Montefiore Square Redesign</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Harlem Plaza Redesign Midterm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-dark:  #1b3a2d;
+      --green-mid:   #2d5a3d;
+      --green-light: #4a8c5c;
+      --green-pale:  #d4e8d8;
+      --gold:        #c9a84c;
+      --gold-light:  #e8cc80;
+      --cream:       #f7f3ec;
+      --ink:         #1a1a18;
+      --muted:       #5a5a52;
+      --border:      rgba(26,26,24,.1);
+      --sidebar-w:   300px;
+      --ff-head:     'Cormorant Garamond', Georgia, serif;
+      --ff-body:     'Jost', sans-serif;
+      --ff-mono:     'DM Mono', monospace;
+      --shadow:      0 4px 24px rgba(27,58,45,.12);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-body); background: var(--cream); color: var(--ink); line-height: 1.75; display: flex; min-height: 100vh; }
 
-  <link rel="stylesheet" href="style.css">
+    /* ══ SIDEBAR ══ */
+    #sidebar { position: fixed; top: 0; left: 0; width: var(--sidebar-w); height: 100vh; display: flex; flex-direction: column; z-index: 200; overflow: hidden; }
+    .sidebar-bg { position: absolute; inset: 0; z-index: 0; }
+    .sidebar-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,26,18,.85) 0%, rgba(18,44,30,.9) 45%, rgba(10,26,18,.97) 100%); z-index: 1; }
+    .sidebar-inner { position: relative; z-index: 2; display: flex; flex-direction: column; height: 100%; padding: 2.5rem 1.75rem 2rem; color: #f7f3ec; overflow-y: auto; }
+    .sidebar-logo { font-family: var(--ff-head); font-size: 1.5rem; font-weight: 700; line-height: 1.2; color: #fff; margin-bottom: .35rem; }
+    .sidebar-sub { font-family: var(--ff-mono); font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 1.5rem; }
+    .sidebar-divider { width: 40px; height: 1.5px; background: var(--gold); margin-bottom: 1.5rem; opacity: .6; }
+    .project-id-box { background: rgba(201,168,76,.1); border: 1px solid rgba(201,168,76,.25); border-radius: 6px; padding: .9rem 1.1rem; margin-bottom: .75rem; }
+    .project-id-box .pid-label { font-family: var(--ff-mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-light); display: block; margin-bottom: .3rem; }
+    .project-id-box .pid-value { font-family: var(--ff-head); font-size: .95rem; font-weight: 600; color: #fff; line-height: 1.3; }
+    nav { flex: 1; margin-top: 1.25rem; }
+    nav ul { list-style: none; }
+    nav ul li { border-bottom: 1px solid rgba(255,255,255,.07); }
+    nav ul li:first-child { border-top: 1px solid rgba(255,255,255,.07); }
+    nav ul li a { display: flex; align-items: center; gap: .75rem; padding: .65rem .4rem; color: rgba(247,243,236,.55); text-decoration: none; font-size: .82rem; font-weight: 500; letter-spacing: .03em; transition: color .2s, padding-left .2s; }
+    nav ul li a .nav-num { font-family: var(--ff-mono); font-size: .62rem; color: rgba(201,168,76,.45); min-width: 1.4rem; }
+    nav ul li a:hover, nav ul li a.active { color: var(--gold-light); padding-left: .6rem; }
+    nav ul li a.active .nav-num { color: var(--gold); }
+    .sidebar-footer { font-family: var(--ff-mono); font-size: .6rem; color: rgba(247,243,236,.28); line-height: 1.7; letter-spacing: .04em; margin-top: 1.5rem; }
+
+    /* ══ MAIN ══ */
+    #main { margin-left: var(--sidebar-w); flex: 1; }
+    section { padding: 5rem 4.5rem; border-bottom: 1px solid var(--border); }
+    section.alt { background: #fff; }
+    .sec-eyebrow { font-family: var(--ff-mono); font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--green-light); display: flex; align-items: center; gap: .6rem; margin-bottom: .9rem; }
+    .sec-eyebrow::after { content: ''; flex: 0 0 28px; height: 1px; background: var(--green-light); }
+    h2 { font-family: var(--ff-head); font-size: clamp(2.2rem, 3.5vw, 3.2rem); font-weight: 700; line-height: 1.1; color: var(--green-dark); margin-bottom: 1.25rem; }
+    h3 { font-family: var(--ff-head); font-size: 1.35rem; font-weight: 600; color: var(--green-dark); margin-bottom: .6rem; }
+    p { color: var(--muted); max-width: 70ch; margin-bottom: 1rem; font-size: .95rem; }
+    p strong { color: var(--ink); font-weight: 600; }
+    .rule { display: flex; align-items: center; gap: 1rem; margin: 2.5rem 0; }
+    .rule::before, .rule::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .rule span { font-family: var(--ff-mono); font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+    /* ══ HERO ══ */
+    #landing { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; background: var(--green-dark); color: #f7f3ec; padding: 5rem 4.5rem; position: relative; overflow: hidden; border-bottom: none; }
+    #landing::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 60% at 90% 40%, rgba(74,140,92,.3) 0%, transparent 65%), radial-gradient(ellipse 40% 40% at 5% 90%, rgba(201,168,76,.12) 0%, transparent 60%); }
+    #landing::after { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(247,243,236,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(247,243,236,.03) 1px, transparent 1px); background-size: 48px 48px; }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-kicker { font-family: var(--ff-mono); font-size: .75rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; display: flex; align-items: center; gap: .8rem; }
+    .hero-kicker::before { content: ''; display: inline-block; width: 32px; height: 1px; background: var(--gold); }
+    #landing h1 { font-family: var(--ff-head); font-size: clamp(3rem, 6vw, 6rem); font-weight: 700; line-height: 1.0; color: #fff; margin-bottom: 1.5rem; }
+    #landing h1 em { font-style: italic; color: var(--gold-light); }
+    .hero-lead { font-size: 1.05rem; color: rgba(247,243,236,.68); max-width: 52ch; margin-bottom: 2.5rem; font-weight: 300; }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: .55em; padding: .8rem 1.75rem; border-radius: 3px; font-family: var(--ff-body); font-weight: 600; font-size: .85rem; letter-spacing: .06em; text-decoration: none; transition: all .2s; cursor: pointer; }
+    .btn-primary { background: var(--gold); color: var(--green-dark); }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-outline { background: transparent; border: 1.5px solid rgba(247,243,236,.25); color: rgba(247,243,236,.8); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-tags { display: flex; gap: .75rem; margin-top: 3rem; flex-wrap: wrap; }
+    .hero-tag { border: 1px solid rgba(247,243,236,.15); border-radius: 20px; padding: .35rem .9rem; font-size: .75rem; color: rgba(247,243,236,.5); font-family: var(--ff-mono); }
+    .hero-scroll-hint { position: absolute; bottom: 2.5rem; right: 4.5rem; font-family: var(--ff-mono); font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(247,243,236,.22); display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+    .hero-scroll-hint::after { content: ''; width: 1px; height: 50px; background: rgba(247,243,236,.13); }
+
+    /* ══ IMAGE SLOTS ══ */
+    .img-slot { width: 100%; border-radius: 8px; overflow: hidden; background: var(--green-pale); position: relative; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: .6rem; border: 2px dashed rgba(74,140,92,.35); }
+    .img-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-slot .slot-icon { font-size: 2.2rem; opacity: .45; }
+    .img-slot .slot-label { font-family: var(--ff-mono); font-size: .68rem; letter-spacing: .12em; color: var(--green-mid); text-transform: uppercase; font-weight: 500; }
+    .img-slot .slot-hint { font-size: .77rem; color: var(--muted); max-width: 28ch; line-height: 1.5; text-align: center; }
+    .img-slot-h260 { height: 260px; padding: 2rem; }
+    .img-slot-h300 { height: 300px; padding: 2rem; }
+    .img-slot-h380 { height: 380px; padding: 2rem; }
+    .img-slot-h220 { height: 220px; padding: 1.5rem; }
+
+    /* ══ OVERVIEW ══ */
+    .overview-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; align-items: start; margin-top: 2rem; }
+    .info-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+    .info-card { background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; transition: box-shadow .2s, transform .2s; }
+    .info-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .info-card .ic-icon { font-size: 1.5rem; margin-bottom: .55rem; display: block; }
+    .info-card h4 { font-family: var(--ff-head); font-size: .95rem; font-weight: 600; color: var(--green-dark); margin-bottom: .35rem; }
+    .info-card p { font-size: .82rem; margin: 0; }
+
+    /* ══ SITE ANALYSIS ══ */
+    .stats-strip { display: grid; grid-template-columns: repeat(4,1fr); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-top: 2.5rem; }
+    .stat-item { padding: 1.75rem 1.5rem; border-right: 1px solid var(--border); text-align: center; }
+    .stat-item:last-child { border-right: none; }
+    .stat-item .sn { font-family: var(--ff-head); font-size: 2.8rem; font-weight: 700; line-height: 1; display: block; }
+    .stat-item .sl { font-size: .73rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: .35rem; }
+    .analysis-list { list-style: none; margin: 1.5rem 0; }
+    .analysis-list li { display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; align-items: start; padding: 1.25rem 0; border-bottom: 1px solid var(--border); }
+    .analysis-list li:first-child { padding-top: 0; border-top: 1px solid var(--border); }
+    .al-icon { width: 44px; height: 44px; background: var(--green-pale); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .al-body h4 { font-family: var(--ff-head); font-size: 1rem; font-weight: 600; color: var(--green-dark); margin-bottom: .3rem; }
+    .al-body p { font-size: .87rem; margin: 0; }
+    .analysis-img-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+
+    /* ══ BEFORE AFTER ══ */
+    .ba-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+    .ba-card { border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+    .ba-label { display: flex; align-items: center; gap: .6rem; padding: .9rem 1.25rem; font-family: var(--ff-mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; }
+    .ba-label.before { background: #fef3f0; color: #c0442a; }
+    .ba-label.after  { background: #f0f7f2; color: var(--green-mid); }
+    .ba-body { padding: 1.25rem; background: #fff; }
+    .ba-body h4 { font-family: var(--ff-head); font-size: 1rem; font-weight: 600; color: var(--green-dark); margin-bottom: .5rem; }
+    .ba-body p { font-size: .85rem; margin: 0; }
+    .ba-issues { list-style: none; margin-top: .75rem; }
+    .ba-issues li { font-size: .83rem; color: var(--muted); padding: .3rem 0; display: flex; gap: .6rem; }
+
+    /* ══ GOALS ══ */
+    .goals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .goal-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 1.75rem 1.5rem; border-top: 3px solid var(--green-light); transition: box-shadow .2s, transform .2s; }
+    .goal-card:hover { box-shadow: var(--shadow); transform: translateY(-3px); }
+    .goal-card .gc-num { font-family: var(--ff-mono); font-size: .62rem; letter-spacing: .15em; color: var(--green-light); display: block; margin-bottom: .75rem; }
+    .goal-card h3 { font-size: 1.1rem; margin-bottom: .6rem; }
+    .goal-card p { font-size: .85rem; margin: 0; }
+
+    /* ══ GALLERY ══ */
+    .gallery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+    .gallery-item { border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+    .gallery-item .gi-caption { background: #fff; padding: .9rem 1rem; }
+    .gallery-item .gi-caption h4 { font-family: var(--ff-head); font-size: .92rem; font-weight: 600; color: var(--green-dark); margin-bottom: .2rem; }
+    .gallery-item .gi-caption p { font-size: .78rem; margin: 0; }
+    .prompt-terminal { background: #0d1f14; border-radius: 8px; overflow: hidden; margin-top: 2rem; }
+    .pt-bar { background: #162b1d; padding: .7rem 1rem; display: flex; align-items: center; gap: .5rem; }
+    .pt-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .pt-dot:nth-child(1) { background: #ff5f57; }
+    .pt-dot:nth-child(2) { background: #ffbd2e; }
+    .pt-dot:nth-child(3) { background: #28c840; }
+    .pt-bar span { font-family: var(--ff-mono); font-size: .68rem; color: rgba(255,255,255,.3); margin-left: .5rem; }
+    .pt-body { padding: 1.5rem; font-family: var(--ff-mono); font-size: .8rem; line-height: 1.9; }
+    .pt-line-label { color: #5ac478; }
+    .pt-line-prompt { color: rgba(200,230,210,.6); }
+    .pt-line-result { color: #c9a84c; }
+    .pt-spacer { display: block; height: .6rem; }
+
+    /* ══ COMMUNITY ══ */
+    .impact-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: start; margin-top: 2rem; }
+    .impact-list { list-style: none; }
+    .impact-list li { display: flex; gap: 1rem; align-items: flex-start; padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
+    .impact-list li:first-child { border-top: 1px solid var(--border); }
+    .il-icon { width: 36px; height: 36px; background: var(--green-pale); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .il-text h4 { font-family: var(--ff-head); font-size: 1rem; font-weight: 600; color: var(--green-dark); margin-bottom: .25rem; }
+    .il-text p { font-size: .85rem; margin: 0; }
+    .impact-quote { background: var(--green-dark); color: #f7f3ec; border-radius: 10px; padding: 2.5rem 2rem; position: relative; overflow: hidden; }
+    .impact-quote::before { content: '"'; font-family: var(--ff-head); font-size: 7rem; color: var(--gold); opacity: .25; position: absolute; top: -1.5rem; left: 1rem; line-height: 1; }
+    .impact-quote blockquote { font-family: var(--ff-head); font-size: 1.2rem; font-style: italic; line-height: 1.55; margin-bottom: 1rem; position: relative; color: rgba(247,243,236,.9); }
+    .impact-quote cite { font-family: var(--ff-mono); font-size: .68rem; letter-spacing: .12em; color: var(--gold-light); text-transform: uppercase; font-style: normal; }
+
+    /* ══ REFLECTION ══ */
+    .reflection-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+    .reflect-block { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 2rem; }
+    .reflect-block .rb-head { font-family: var(--ff-mono); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--green-light); margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem; }
+    .reflect-block .rb-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .reflect-block p { font-size: .88rem; margin-bottom: .85rem; }
+    .reflect-block p:last-child { margin: 0; }
+    .lessons-list { list-style: none; margin-top: 1.25rem; }
+    .lessons-list li { font-size: .87rem; color: var(--muted); padding: .45rem 0; display: flex; align-items: flex-start; gap: .65rem; }
+    .lessons-list li::before { content: '→'; color: var(--green-light); font-weight: 700; flex-shrink: 0; }
+    .lessons-list li strong { color: var(--ink); }
+
+    /* ══ CREDITS ══ */
+    #credits { background: var(--green-dark); color: rgba(247,243,236,.7); padding: 4rem 4.5rem; border-bottom: none; }
+    #credits h2 { color: #fff; font-size: 2rem; margin-bottom: 1rem; }
+    #credits p { color: rgba(247,243,236,.55); font-size: .88rem; }
+    .credits-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; margin-top: 2.5rem; border-top: 1px solid rgba(247,243,236,.1); padding-top: 2.5rem; }
+    .credit-col h4 { font-family: var(--ff-mono); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: .75rem; }
+    .credit-col p { font-size: .83rem; color: rgba(247,243,236,.45); margin: 0; line-height: 1.85; }
+    footer { background: #0d1f14; color: rgba(247,243,236,.22); text-align: center; padding: 1.25rem; font-family: var(--ff-mono); font-size: .63rem; letter-spacing: .1em; }
+
+    /* ══ MOBILE ══ */
+    @media (max-width: 960px) {
+      :root { --sidebar-w: 0px; }
+      #sidebar { display: none; }
+      #main { margin-left: 0; }
+      section { padding: 3rem 1.75rem; }
+      #landing { padding: 4rem 1.75rem; min-height: auto; }
+      .overview-grid, .analysis-img-row, .ba-grid, .impact-layout, .reflection-cols { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .credits-grid { grid-template-columns: 1fr; }
+    }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    .fu  { animation: fadeUp .75s ease both; }
+    .fu1 { animation-delay: .1s; }
+    .fu2 { animation-delay: .25s; }
+    .fu3 { animation-delay: .4s; }
+    .fu4 { animation-delay: .55s; }
+  </style>
 </head>
-
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
-    <h1>Montefiore Square Redesign</h1>
-    <p>Safer & Better-Lit Pedestrian Plaza</p>
-  </header>
+<!-- ══ SIDEBAR ══ -->
+<aside id="sidebar">
+  <!-- Mountain SVG painted background -->
+  <svg class="sidebar-bg" viewBox="0 0 300 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#061410"/>
+        <stop offset="100%" stop-color="#122318"/>
+      </linearGradient>
+      <linearGradient id="mB" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1a3d28"/>
+        <stop offset="100%" stop-color="#2a5038"/>
+      </linearGradient>
+      <linearGradient id="mM" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#12301e"/>
+        <stop offset="100%" stop-color="#1b3a28"/>
+      </linearGradient>
+      <linearGradient id="mF" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0a2016"/>
+        <stop offset="100%" stop-color="#07140e"/>
+      </linearGradient>
+      <linearGradient id="snowG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#e0ece4" stop-opacity=".85"/>
+        <stop offset="100%" stop-color="#e0ece4" stop-opacity="0"/>
+      </linearGradient>
+      <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#f0d870" stop-opacity=".35"/>
+        <stop offset="100%" stop-color="#f0d870" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
 
-  <!-- MAIN IMAGE -->
-  <section class="hero">
-    <img src="images/main.jpg" alt="Project Board">
+    <!-- Sky -->
+    <rect width="300" height="900" fill="url(#sky)"/>
+
+    <!-- Moon glow -->
+    <circle cx="230" cy="85" r="40" fill="url(#moonGlow)"/>
+    <!-- Moon body -->
+    <circle cx="230" cy="85" r="16" fill="#ddd090" opacity=".22"/>
+    <!-- Moon crescent shadow -->
+    <circle cx="237" cy="80" r="13" fill="#061410" opacity=".65"/>
+
+    <!-- Stars scattered -->
+    <circle cx="25"  cy="40"  r=".9"  fill="#fff" opacity=".55"/>
+    <circle cx="65"  cy="18"  r=".7"  fill="#fff" opacity=".5"/>
+    <circle cx="100" cy="55"  r="1.1" fill="#fff" opacity=".45"/>
+    <circle cx="145" cy="28"  r=".8"  fill="#fff" opacity=".6"/>
+    <circle cx="180" cy="70"  r=".9"  fill="#fff" opacity=".4"/>
+    <circle cx="265" cy="35"  r=".7"  fill="#fff" opacity=".55"/>
+    <circle cx="290" cy="110" r="1"   fill="#fff" opacity=".35"/>
+    <circle cx="55"  cy="90"  r=".6"  fill="#fff" opacity=".4"/>
+    <circle cx="130" cy="100" r=".8"  fill="#fff" opacity=".35"/>
+    <circle cx="200" cy="130" r=".7"  fill="#fff" opacity=".3"/>
+    <circle cx="50"  cy="140" r=".9"  fill="#fff" opacity=".3"/>
+    <circle cx="280" cy="160" r=".6"  fill="#fff" opacity=".35"/>
+
+    <!-- Back mountain range -->
+    <path d="M-10 680
+             L30  500 L55  560 L90  420 L120 490
+             L155 340 L185 430 L215 360 L250 450
+             L275 380 L310 460
+             L310 900 L-10 900Z"
+          fill="url(#mB)" opacity=".75"/>
+
+    <!-- Snow patches back -->
+    <path d="M155 340 L172 385 L138 385Z" fill="url(#snowG)" opacity=".65"/>
+    <path d="M90  420 L107 460 L73  460Z" fill="url(#snowG)" opacity=".55"/>
+    <path d="M275 380 L288 415 L262 415Z" fill="url(#snowG)" opacity=".5"/>
+
+    <!-- Mid mountain range -->
+    <path d="M-10 760
+             L20  610 L55  660 L90  540 L120 600
+             L155 480 L185 550 L220 470 L250 540
+             L280 490 L310 555
+             L310 900 L-10 900Z"
+          fill="url(#mM)"/>
+
+    <!-- Snow patches mid -->
+    <path d="M155 480 L170 520 L140 520Z" fill="url(#snowG)" opacity=".7"/>
+    <path d="M220 470 L233 505 L207 505Z" fill="url(#snowG)" opacity=".6"/>
+
+    <!-- Front dark ridge -->
+    <path d="M-10 900 L-10 800
+             L25  750 L60  790 L95  730 L130 770
+             L160 720 L195 758 L225 710 L260 748
+             L290 715 L310 740
+             L310 900Z"
+          fill="url(#mF)"/>
+
+    <!-- Pine trees silhouette left cluster -->
+    <g fill="#061410" opacity=".9">
+      <polygon points="5,830 15,790 25,830"/>
+      <polygon points="13,830 23,778 33,830"/>
+      <polygon points="22,830 33,783 44,830"/>
+    </g>
+    <!-- Pine trees silhouette right cluster -->
+    <g fill="#061410" opacity=".9">
+      <polygon points="255,830 265,788 275,830"/>
+      <polygon points="265,830 276,776 287,830"/>
+      <polygon points="276,830 288,784 300,830"/>
+    </g>
+
+    <!-- Subtle aurora effect -->
+    <ellipse cx="80" cy="200" rx="120" ry="40" fill="#3a7d44" opacity=".04" transform="rotate(-15,80,200)"/>
+    <ellipse cx="200" cy="250" rx="100" ry="30" fill="#4a9c5c" opacity=".04" transform="rotate(10,200,250)"/>
+  </svg>
+
+  <div class="sidebar-overlay"></div>
+
+  <div class="sidebar-inner">
+    <div class="sidebar-logo">Harlem Plaza<br>Redesign</div>
+    <div class="sidebar-sub">Urban Design Midterm · 2025</div>
+    <div class="sidebar-divider"></div>
+
+    <div class="project-id-box">
+      <span class="pid-label">Project Track</span>
+      <span class="pid-value">Community Wellness &amp; Pedestrian Safety</span>
+    </div>
+    <div class="project-id-box">
+      <span class="pid-label">Site</span>
+      <span class="pid-value">Montefiore Square, East Harlem, NYC</span>
+    </div>
+
+    <nav>
+      <ul>
+        <li><a href="#landing"       class="active"><span class="nav-num">01</span>Home</a></li>
+        <li><a href="#overview"              ><span class="nav-num">02</span>Overview</a></li>
+        <li><a href="#site-analysis"         ><span class="nav-num">03</span>Site Analysis</a></li>
+        <li><a href="#before-after"          ><span class="nav-num">04</span>Before &amp; After</a></li>
+        <li><a href="#goals"                 ><span class="nav-num">05</span>Design Goals</a></li>
+        <li><a href="#gallery"               ><span class="nav-num">06</span>Gallery</a></li>
+        <li><a href="#community"             ><span class="nav-num">07</span>Community Impact</a></li>
+        <li><a href="#reflection"            ><span class="nav-num">08</span>Reflection</a></li>
+        <li><a href="#credits"               ><span class="nav-num">09</span>Credits</a></li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      AI-Assisted Urban Design<br>
+      HTML · CSS · JavaScript<br>
+      © 2025 Midterm Project
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main id="main">
+
+  <!-- HERO -->
+  <section id="landing">
+    <div class="hero-content">
+      <div class="hero-kicker fu">Urban Design Midterm Proposal · East Harlem, NYC</div>
+      <h1 class="fu fu1">Reimagining<br><em>Harlem Plaza</em></h1>
+      <p class="hero-lead fu fu2">A research-driven, AI-assisted redesign of Montefiore Square — transforming an underused hardscape into a safe, green, and community-centered public space for East Harlem residents.</p>
+      <div class="hero-btns fu fu3">
+        <a href="#overview" class="btn btn-primary">Explore the Project</a>
+        <a href="#gallery"  class="btn btn-outline">View AI Gallery</a>
+      </div>
+      <div class="hero-tags fu fu4">
+        <span class="hero-tag">🌿 Green Infrastructure</span>
+        <span class="hero-tag">♿ Accessibility</span>
+        <span class="hero-tag">🚶 Pedestrian Safety</span>
+        <span class="hero-tag">🤖 AI-Assisted Design</span>
+        <span class="hero-tag">📍 East Harlem, NYC</span>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">Scroll</div>
   </section>
 
-  <!-- CONTENT -->
-  <section class="content">
-    <h2>Project Overview</h2>
-    <p>
-      This project reimagines Montefiore Square as a safer, more accessible,
-      and visually engaging pedestrian plaza. The redesign focuses on lighting,
-      greenery, and spatial clarity to improve user experience.
-    </p>
+  <!-- OVERVIEW -->
+  <section id="overview" class="alt">
+    <span class="sec-eyebrow">02 — Project Overview</span>
+    <h2>What This Project Is About</h2>
+    <div class="overview-grid">
+      <div>
+        <p>This midterm presents a <strong>comprehensive redesign proposal for Montefiore Square</strong>, a triangular plaza located at E 138th St and Willis Ave in East Harlem. Despite sitting at a high-traffic intersection surrounded by residential buildings, schools, and local businesses, the plaza currently functions as little more than a concrete pass-through with no meaningful amenity for the community it serves.</p>
+        <p>The project combines <strong>field observation, NYC DOT precedent research, and AI-generated visualization</strong> to develop a design proposal that addresses the plaza's core failures: lack of shade and seating, poor pedestrian safety, no community programming, and an unwelcoming spatial character.</p>
+        <p>Informed by successful DOT plaza interventions — including Westchester Sq Plaza, Myrtle/Wyckoff Plaza, and Hillel Place — this redesign demonstrates that <strong>small urban spaces can dramatically improve daily quality of life</strong> when designed with real users in mind.</p>
+        <div class="info-cards">
+          <div class="info-card">
+            <span class="ic-icon">🎯</span>
+            <h4>Essential Question</h4>
+            <p>How can we redesign Montefiore Square to become a safe, welcoming, and active hub for all East Harlem residents?</p>
+          </div>
+          <div class="info-card">
+            <span class="ic-icon">👥</span>
+            <h4>Primary Users</h4>
+            <p>Seniors, families, youth, daily commuters, and local residents who currently avoid or rapidly pass through the space.</p>
+          </div>
+          <div class="info-card">
+            <span class="ic-icon">📐</span>
+            <h4>Project Track</h4>
+            <p>Community wellness and pedestrian safety — with secondary focus on green infrastructure and inclusive programming.</p>
+          </div>
+          <div class="info-card">
+            <span class="ic-icon">🛠️</span>
+            <h4>Methods Used</h4>
+            <p>Site observation via Google Maps, NYC DOT research, iterative AI prompting with DALL·E, and design synthesis.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- ★ REPLACE: Put your overview/context image inside the div below -->
+        <!-- Example: <img src="images/overview.jpg" alt="Plaza overview"> -->
+        <div class="img-slot img-slot-h380">
+          <span class="slot-icon">🗺️</span>
+          <span class="slot-label">Overview / Context Image</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/overview.jpg" alt="..."&gt;</span>
+        </div>
+        <p style="font-size:.72rem; color:var(--muted); margin-top:.5rem; font-family:var(--ff-mono);">↑ Add your DALL·E overview image or Google Maps screenshot here</p>
+      </div>
+    </div>
+  </section>
 
-    <h2>Design Goals</h2>
-    <ul>
-      <li>Improve pedestrian safety</li>
-      <li>Enhance lighting and visibility</li>
-      <li>Create a welcoming public space</li>
+  <!-- SITE ANALYSIS -->
+  <section id="site-analysis">
+    <span class="sec-eyebrow">03 — Site Analysis</span>
+    <h2>Understanding Montefiore Square</h2>
+    <p>A thorough understanding of the site's existing conditions — its movement patterns, social dynamics, physical qualities, and safety context — is essential before proposing any redesign. The following observations were made through Google Street View analysis, aerial mapping, and NYC DOT data.</p>
+
+    <div class="stats-strip">
+      <div class="stat-item"><span class="sn" style="color:var(--green-light);">0</span><span class="sl">Shaded Seating Areas</span></div>
+      <div class="stat-item"><span class="sn" style="color:#c0442a;">4+</span><span class="sl">Pedestrian Conflict Points</span></div>
+      <div class="stat-item"><span class="sn" style="color:var(--green-light);">~25%</span><span class="sl">Green Coverage Today</span></div>
+      <div class="stat-item"><span class="sn" style="color:#c0442a;">Low</span><span class="sl">Evening Safety Rating</span></div>
+    </div>
+
+    <ul class="analysis-list" style="margin-top:2rem;">
+      <li>
+        <div class="al-icon">🚶</div>
+        <div class="al-body">
+          <h4>Pedestrian Movement &amp; Desire Lines</h4>
+          <p>High foot traffic occurs during morning and evening commute hours as residents travel to the nearby 138th St/Grand Concourse subway station. People use the plaza as a diagonal cut-through, but no current paving accommodates this natural desire line — forcing pedestrians onto edges uncomfortably close to traffic. Informal wear patterns in the existing surface reveal where the real paths should be.</p>
+        </div>
+      </li>
+      <li>
+        <div class="al-icon">🌡️</div>
+        <div class="al-body">
+          <h4>Microclimate &amp; Heat Island Effect</h4>
+          <p>The plaza is almost entirely paved in dark asphalt and concrete, creating a strong heat island effect. With no tree canopy or overhead shade structure, surface temperatures in summer can exceed air temperature by 20–30°F. This makes the space unusable during peak summer heat — precisely when public space is most needed for outdoor relief and community gathering.</p>
+        </div>
+      </li>
+      <li>
+        <div class="al-icon">🚗</div>
+        <div class="al-body">
+          <h4>Vehicle Conflict &amp; Safety Conditions</h4>
+          <p>Multiple vehicle turning movements cross pedestrian paths with poor sight lines and no raised treatments. Crossing signals are timed for traffic flow, not pedestrian comfort. No protective buffer planting or parking lane separates pedestrians from moving vehicles — especially dangerous for seniors, children, and people with mobility aids.</p>
+        </div>
+      </li>
+      <li>
+        <div class="al-icon">🏘️</div>
+        <div class="al-body">
+          <h4>Surrounding Community Context</h4>
+          <p>Within a 3-block radius: multi-family residential housing, a public high school, a senior services center, a bodega cluster, and several faith institutions. This diverse mix demands a multi-generational, multi-use design response — not a single-program space. The plaza can simultaneously serve daily commuters, after-school youth, seniors, and weekend community events.</p>
+        </div>
+      </li>
+      <li>
+        <div class="al-icon">💡</div>
+        <div class="al-body">
+          <h4>Lighting &amp; Evening Activation</h4>
+          <p>The plaza currently lacks adequate pedestrian-scale lighting. The few overhead street lights serve drivers, not pedestrians. After dark, the space feels unsafe and is abandoned even by those who regularly use it during the day. Any redesign must incorporate layered lighting — bollards, string lights, or illuminated seating elements — to extend activation past sunset.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="rule"><span>Site Photography</span></div>
+    <div class="analysis-img-row">
+      <!-- ★ REPLACE: Add your Google Maps Street View screenshot -->
+      <div class="img-slot img-slot-h260">
+        <span class="slot-icon">📸</span>
+        <span class="slot-label">Current Site — Street Level</span>
+        <span class="slot-hint">Replace with: &lt;img src="images/site-street.jpg"&gt;<br>Your Google Maps street-view screenshot</span>
+      </div>
+      <!-- ★ REPLACE: Add your Google Maps aerial screenshot -->
+      <div class="img-slot img-slot-h260">
+        <span class="slot-icon">🛰️</span>
+        <span class="slot-label">Current Site — Aerial View</span>
+        <span class="slot-hint">Replace with: &lt;img src="images/site-aerial.jpg"&gt;<br>Your Google Maps aerial/satellite screenshot</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEFORE & AFTER -->
+  <section id="before-after" class="alt">
+    <span class="sec-eyebrow">04 — Before &amp; After</span>
+    <h2>The Transformation</h2>
+    <p>The following comparisons illustrate the gap between the plaza's current condition and the proposed redesign — across key categories of safety, comfort, green space, and community programming.</p>
+    <div class="ba-grid">
+      <div class="ba-card">
+        <div class="ba-label before">❌ Before — Current State</div>
+        <!-- ★ REPLACE: Add your current site photo or Google Maps screenshot -->
+        <div class="img-slot img-slot-h300" style="border-radius:0; border:none;">
+          <span class="slot-icon">📷</span>
+          <span class="slot-label">Before Image</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/before.jpg"&gt;<br>Current site photo or Google Maps screenshot</span>
+        </div>
+        <div class="ba-body">
+          <h4>Montefiore Square Today</h4>
+          <p>A hardscape-dominated, underactivated space that fails its community on nearly every metric of good public realm design.</p>
+          <ul class="ba-issues">
+            <li data-icon="🔴">No shade trees or canopy coverage</li>
+            <li data-icon="🔴">Ambiguous pedestrian-vehicle boundaries</li>
+            <li data-icon="🔴">No accessible or comfortable seating</li>
+            <li data-icon="🔴">Inadequate evening lighting</li>
+            <li data-icon="🔴">Zero programming infrastructure</li>
+            <li data-icon="🔴">Severe heat island effect in summer</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-label after">✅ After — Proposed Redesign</div>
+        <!-- ★ REPLACE: Add your DALL·E before/after or final rendering -->
+        <div class="img-slot img-slot-h300" style="border-radius:0; border:none;">
+          <span class="slot-icon">🎨</span>
+          <span class="slot-label">After — DALL·E Rendering</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/after.jpg"&gt;<br>Your AI-generated redesign rendering</span>
+        </div>
+        <div class="ba-body">
+          <h4>Montefiore Square Redesigned</h4>
+          <p>A pedestrian-first, green, and inclusive plaza serving all ages and abilities with year-round activation and cultural identity.</p>
+          <ul class="ba-issues">
+            <li data-icon="🟢">8–10 mature shade trees with full canopy</li>
+            <li data-icon="🟢">Raised crosswalks &amp; protected pedestrian edges</li>
+            <li data-icon="🟢">Multi-type accessible seating alcoves</li>
+            <li data-icon="🟢">Pedestrian bollard lights + string lighting</li>
+            <li data-icon="🟢">Flexible surface for markets &amp; events</li>
+            <li data-icon="🟢">Native planting &amp; cultural mosaic tile edging</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESIGN GOALS -->
+  <section id="goals">
+    <span class="sec-eyebrow">05 — Design Goals</span>
+    <h2>Five Principles Guiding the Redesign</h2>
+    <p>Every design decision in this proposal is anchored to one or more of the following guiding principles — derived from site analysis, community context, and NYC DOT best practices for urban plaza design.</p>
+    <div class="goals-grid">
+      <div class="goal-card">
+        <span class="gc-num">Goal 01</span>
+        <h3>🚶 Prioritize Pedestrians</h3>
+        <p>Redesign the edge conditions and crossing points to give pedestrians unambiguous priority. Use raised crosswalks, planted buffers, and clear desire-line paths to make movement through the plaza feel safe, direct, and comfortable for all users including those with mobility aids.</p>
+      </div>
+      <div class="goal-card">
+        <span class="gc-num">Goal 02</span>
+        <h3>🌳 Increase Green &amp; Shade</h3>
+        <p>Plant a minimum of 8 mature canopy trees to reduce the heat island effect and create comfortable outdoor conditions from spring through fall. Add native understory planting, seasonal color, and permeable ground surfaces to increase ecological value and visual richness.</p>
+      </div>
+      <div class="goal-card">
+        <span class="gc-num">Goal 03</span>
+        <h3>♿ Design for All Abilities</h3>
+        <p>Ensure full ADA compliance throughout — level surfaces, tactile paving at transitions, seating with backs and armrests at appropriate heights, and clear visual contrast at all edges. The redesign must work as well for an 80-year-old with a walker as for a teenager on a skateboard.</p>
+      </div>
+      <div class="goal-card">
+        <span class="gc-num">Goal 04</span>
+        <h3>📅 Enable Programming</h3>
+        <p>Provide a flexible, level central surface with power access to support weekend markets, community events, cultural performances, and fitness classes. A plaza that can be activated by the community is a plaza that belongs to the community — design the space to invite use, not just permit it.</p>
+      </div>
+      <div class="goal-card">
+        <span class="gc-num">Goal 05</span>
+        <h3>🎨 Reflect Community Identity</h3>
+        <p>Incorporate design elements that reference East Harlem's cultural heritage — mosaic tile work, warm material palettes, and planting choices that connect to the neighborhood's Latin and African American traditions. The plaza should feel like it belongs to this specific community, not any generic city plaza.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="alt">
+    <span class="sec-eyebrow">06 — AI Design Gallery</span>
+    <h2>Exploring Design Directions with DALL·E</h2>
+    <p style="max-width:68ch; margin-bottom:2rem;">Before arriving at the final proposal, multiple design directions were explored using AI image generation. Each prompt was developed from real site photographs and knowledge of the plaza's context — ensuring outputs were specific to Montefiore Square, not generic urban renderings.</p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <!-- ★ REPLACE: Add your Option A DALL·E image -->
+        <div class="img-slot img-slot-h220" style="border-radius:0; border:none;">
+          <span class="slot-icon">🌿</span>
+          <span class="slot-label">Option A</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/option-a.jpg"&gt;</span>
+        </div>
+        <div class="gi-caption">
+          <h4>Option A — Green Wellness Plaza</h4>
+          <p>Nature-forward design with shade trees, native planting, lawn zones, and a central wellness garden prioritizing rest and ecology.</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <!-- ★ REPLACE: Add your Option B DALL·E image -->
+        <div class="img-slot img-slot-h220" style="border-radius:0; border:none;">
+          <span class="slot-icon">🏪</span>
+          <span class="slot-label">Option B</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/option-b.jpg"&gt;</span>
+        </div>
+        <div class="gi-caption">
+          <h4>Option B — Community Market Plaza</h4>
+          <p>Active market concept with vendor kiosks, public art installations, weekend programming, and socially oriented seating zones.</p>
+        </div>
+      </div>
+      <div class="gallery-item" style="border-color: var(--green-light);">
+        <!-- ★ REPLACE: Add your FINAL selected DALL·E rendering -->
+        <div class="img-slot img-slot-h220" style="border-radius:0; border:none; border-top:3px solid var(--green-light);">
+          <span class="slot-icon">✅</span>
+          <span class="slot-label">Selected Final Proposal</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/final.jpg"&gt;</span>
+        </div>
+        <div class="gi-caption">
+          <h4>Selected — Pedestrian-Green Hub</h4>
+          <p>The strongest balance of safety, green infrastructure, accessibility, and community activation. Selected as the final proposal.</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <!-- ★ REPLACE: Add your aerial concept DALL·E image -->
+        <div class="img-slot img-slot-h220" style="border-radius:0; border:none;">
+          <span class="slot-icon">🛰️</span>
+          <span class="slot-label">Aerial Concept</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/aerial.jpg"&gt;</span>
+        </div>
+        <div class="gi-caption">
+          <h4>Aerial Plan Concept</h4>
+          <p>Bird's-eye rendering showing the circular gathering area, radial paths, shade tree positions, and accessible entry points.</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <!-- ★ REPLACE: Add your evening/lighting DALL·E image -->
+        <div class="img-slot img-slot-h220" style="border-radius:0; border:none;">
+          <span class="slot-icon">🌙</span>
+          <span class="slot-label">Evening Activation</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/evening.jpg"&gt;</span>
+        </div>
+        <div class="gi-caption">
+          <h4>Evening Activation Rendering</h4>
+          <p>Nighttime view showing pedestrian-scale lighting, string lights, and the plaza's capacity for after-dark community use.</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <!-- ★ REPLACE: Add your material detail DALL·E image -->
+        <div class="img-slot img-slot-h220" style="border-radius:0; border:none;">
+          <span class="slot-icon">🎨</span>
+          <span class="slot-label">Material Detail</span>
+          <span class="slot-hint">Replace with: &lt;img src="images/detail.jpg"&gt;</span>
+        </div>
+        <div class="gi-caption">
+          <h4>Material &amp; Detail Study</h4>
+          <p>Close-up rendering of mosaic tile seating walls, native planting palette, and the cultural material language of the redesign.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule"><span>AI Prompt Development Log</span></div>
+    <div class="prompt-terminal">
+      <div class="pt-bar">
+        <div class="pt-dot"></div><div class="pt-dot"></div><div class="pt-dot"></div>
+        <span>dalle-prompt-log.txt — Iteration Record</span>
+      </div>
+      <div class="pt-body">
+        <span class="pt-line-label">PROMPT 01 — Initial Exploration</span><br>
+        <span class="pt-line-prompt">"Redesign this existing Harlem plaza as a safer pedestrian-centered public space with better lighting, clear crossings, seating, and street trees. Keep the neighborhood context visible."</span><br>
+        <span class="pt-line-result">→ Result: Strong base concept. Too generic in material palette; lacked cultural specificity. Rejected.</span>
+        <span class="pt-spacer"></span>
+        <span class="pt-line-label">PROMPT 02 — Cultural Identity Added</span><br>
+        <span class="pt-line-prompt">"Transform this hardscape Harlem plaza into a lively community-centered public space with shade trees, Harlem-inspired planting, mosaic-tiled seating walls, and warm pedestrian lighting."</span><br>
+        <span class="pt-line-result">→ Result: Richer cultural tone. Planting felt specific to East Harlem. Moving in right direction.</span>
+        <span class="pt-spacer"></span>
+        <span class="pt-line-label">PROMPT 03 — Before/After Frame (Selected for Final)</span><br>
+        <span class="pt-line-prompt">"Before and after redesign of a neighborhood plaza in Harlem with improved accessibility, green planting, seating alcoves, and safe pedestrian crossings — warm afternoon light, photorealistic."</span><br>
+        <span class="pt-line-result">→ Result: Most compelling output. Clear transformation visible. Selected for Final Proposal section.</span>
+        <span class="pt-spacer"></span>
+        <span class="pt-line-label">PROMPT 04 — Aerial Concept View</span><br>
+        <span class="pt-line-prompt">"Bird's eye view redesign concept of small urban plaza in East Harlem: circular central gathering area, radial paths, shade trees at corners, seating walls, accessible entry points, warm midday sun."</span><br>
+        <span class="pt-line-result">→ Result: Useful layout diagram. Included as plan reference in Site Analysis section.</span>
+        <span class="pt-spacer"></span>
+        <span class="pt-line-label">PROMPT 05 — Evening Activation</span><br>
+        <span class="pt-line-prompt">"Redesigned Harlem community plaza at dusk with string lights, illuminated bollards, people sitting and socializing, active vendor area, warm amber glow, photorealistic urban rendering."</span><br>
+        <span class="pt-line-result">→ Result: Strong atmosphere. Demonstrates evening programming potential effectively. Used in gallery.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY IMPACT -->
+  <section id="community">
+    <span class="sec-eyebrow">07 — Community Impact</span>
+    <h2>Who This Redesign Serves</h2>
+    <p>A plaza redesign is only successful if it genuinely improves daily life for the people who live and work nearby. This proposal was developed with specific user groups and community needs at the center of every decision — not as an afterthought.</p>
+    <div class="impact-layout">
+      <div>
+        <ul class="impact-list">
+          <li>
+            <div class="il-icon">👴</div>
+            <div class="il-text">
+              <h4>Seniors &amp; Older Adults</h4>
+              <p>Multiple accessible seating nodes with backed benches, armrests, and shade coverage create comfortable resting spaces for seniors walking to and from the nearby senior center and subway station. Level surfaces and tactile paving ensure safe navigation for those with mobility aids and visual impairments.</p>
+            </div>
+          </li>
+          <li>
+            <div class="il-icon">👨‍👩‍👧</div>
+            <div class="il-text">
+              <h4>Families with Children</h4>
+              <p>The central flexible lawn area and shaded seating zones provide a safe gathering space for families — particularly after school and on weekends. The redesign removes the dangerous ambiguity between pedestrian and vehicle space that currently makes the plaza feel unsafe for young children and stroller users.</p>
+            </div>
+          </li>
+          <li>
+            <div class="il-icon">🧑</div>
+            <div class="il-text">
+              <h4>Youth &amp; Students</h4>
+              <p>The plaza's proximity to a local high school means students pass through or gather here daily. The proposed seating walls, open social space, and flexible event surface give youth a legitimate place to be after school — reducing conflicts and improving the perceived and actual safety of the entire block.</p>
+            </div>
+          </li>
+          <li>
+            <div class="il-icon">🛒</div>
+            <div class="il-text">
+              <h4>Local Vendors &amp; Businesses</h4>
+              <p>The weekend programming zone with power access supports a rotating community market — providing income opportunities for local vendors while drawing foot traffic that benefits surrounding businesses. A lively, activated plaza is economically beneficial for the neighborhood, not just aesthetically pleasant.</p>
+            </div>
+          </li>
+          <li>
+            <div class="il-icon">🌍</div>
+            <div class="il-text">
+              <h4>The Broader Neighborhood</h4>
+              <p>Native planting improves local air quality and supports pollinators. Permeable surfaces reduce stormwater runoff. Shade trees mitigate the urban heat island at a neighborhood scale. This redesign delivers environmental benefits that extend far beyond the plaza's physical boundaries.</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="impact-quote">
+          <blockquote>"Public space is not a luxury — it is the living room of the city. Every resident deserves a neighborhood plaza that feels like it was designed for them."</blockquote>
+          <cite>— Urban Design Principle, NYC DOT Street Design Manual</cite>
+        </div>
+        <div style="margin-top:1.5rem;">
+          <!-- ★ REPLACE: Add your community-use DALL·E rendering -->
+          <div class="img-slot img-slot-h300">
+            <span class="slot-icon">👥</span>
+            <span class="slot-label">Community Use Rendering</span>
+            <span class="slot-hint">Replace with: &lt;img src="images/community.jpg"&gt;<br>DALL·E image showing people actively using the redesigned plaza</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFLECTION -->
+  <section id="reflection" class="alt">
+    <span class="sec-eyebrow">08 — Reflection &amp; Conclusion</span>
+    <h2>AI as a Design Tool — Not a Designer</h2>
+    <p>This project used DALL·E as a rapid visualization and exploration tool throughout the design process. Reflecting honestly on where AI added value — and where it fell short — is central to understanding how to use these tools responsibly in design practice.</p>
+    <div class="reflection-cols">
+      <div class="reflect-block">
+        <div class="rb-head">What AI Helped With</div>
+        <p>AI image generation was most valuable for <strong>rapidly visualizing multiple design directions</strong> without committing to detailed manual drawing. In a matter of hours, it was possible to explore a green wellness concept, a market plaza, a pedestrian safety focus, and aerial layout studies — generating enough visual material to make informed comparisons between approaches.</p>
+        <p>AI also excelled at <strong>communicating atmosphere</strong> — the warmth of afternoon light through a canopy, the social energy of an evening market, the calm of a shaded seating alcove. These qualities are difficult to convey in a hand sketch but critical for presenting a design vision convincingly to reviewers and stakeholders.</p>
+        <p>Iterative prompting allowed the imagery to become increasingly specific and site-appropriate — moving from generic "urban plaza" outputs to renderings that felt genuinely connected to Harlem's cultural and spatial identity.</p>
+      </div>
+      <div class="reflect-block">
+        <div class="rb-head">What Required Human Judgment</div>
+        <p><strong>Effective prompting required genuine site knowledge.</strong> The most useful images only emerged after studying the actual plaza through Google Maps, NYC DOT references, and site analysis. Generic prompts produced generic results. Every useful output was earned through specific, informed prompting — not from accepting the first result.</p>
+        <p><strong>Selecting between options required design judgment.</strong> AI produced images, but it could not evaluate which direction best served the community's real needs, which was most physically feasible, or which was most culturally appropriate. Those decisions required human understanding of the site, the users, and the design discipline.</p>
+        <p><strong>All analysis, justification, and written content was entirely human work.</strong> The site analysis, goal development, community impact assessment, and design rationale represent original thinking that AI tools cannot replicate — and should not be expected to.</p>
+      </div>
+    </div>
+    <div class="rule"><span>Key Lessons from this Project</span></div>
+    <ul class="lessons-list">
+      <li><strong>Start with real site knowledge.</strong> The quality of AI outputs is directly proportional to the quality of your site understanding and prompting specificity.</li>
+      <li><strong>Iterate, don't accept the first result.</strong> Every useful image in this project came after at least 3–5 prompt refinements — not from the first attempt.</li>
+      <li><strong>Use AI to explore, not to conclude.</strong> AI is a tool for rapid exploration. The conclusions, judgments, and design rationale must always be made by the designer.</li>
+      <li><strong>Small spaces matter enormously.</strong> A thoughtful plaza redesign can have a massive impact on daily quality of life for thousands of residents at a fraction of the cost of major infrastructure.</li>
+      <li><strong>Design for real people, not ideal users.</strong> The most important decisions here came from thinking specifically about seniors, children, and daily commuters — not abstract "users."</li>
     </ul>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>© 2026 Montefiore Redesign Project</p>
-  </footer>
+  <!-- CREDITS -->
+  <section id="credits">
+    <span class="sec-eyebrow" style="color:var(--gold-light);">09 — Credits</span>
+    <h2>Credits &amp; References</h2>
+    <p>All images used in this project are original AI-generated renderings created using DALL·E in ChatGPT, based on site references gathered from Google Maps and NYC DOT sources. This is an academic exercise submitted in fulfillment of the Urban Design Midterm requirements.</p>
+    <div class="credits-grid">
+      <div class="credit-col">
+        <h4>Site References</h4>
+        <p>Montefiore Square, East Harlem, NYC<br>Google Maps Street View &amp; Aerial<br>NYC DOT Plaza Program<br>NYC Street Design Manual<br>nycdotprojects.info</p>
+      </div>
+      <div class="credit-col">
+        <h4>Design Precedents</h4>
+        <p>Westchester Sq Plaza — NYC DOT<br>Myrtle/Wyckoff Plaza — NYC DOT<br>Hillel Place Plaza — NYC DOT<br>HTML5 UP Strata (reference only)<br>Urban Design Studio Guidelines</p>
+      </div>
+      <div class="credit-col">
+        <h4>Tools Used</h4>
+        <p>DALL·E — AI image generation<br>ChatGPT — Prompt development<br>Google Maps — Site observation<br>HTML / CSS / JavaScript — Student-built<br>GitHub Pages — Hosting</p>
+      </div>
+    </div>
+  </section>
 
+  <footer>© 2025 Harlem Plaza Midterm Project · Urban Design Studio · All AI images are original student work · Built with HTML, CSS &amp; JavaScript</footer>
+</main>
+
+<script>
+  // Active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks  = document.querySelectorAll('nav a');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { threshold: 0.25 });
+  sections.forEach(s => obs.observe(s));
+
+  // Fade-up on scroll for hero elements
+  const fuEls = document.querySelectorAll('.fu');
+  const fuObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.style.animationPlayState = 'running'; fuObs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  fuEls.forEach(el => { el.style.animationPlayState = 'paused'; fuObs.observe(el); });
+</script>
 </body>
 </html>
